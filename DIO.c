@@ -586,16 +586,27 @@ void DIO_AlternateSelect (uint32_t u32PortBase , uint8_t u8PinsNum , uint8_t u32
  * Function Name:   DIO_WritePin
  * Description:     used to write on specific pin
  * parameters:
- *      Inputs:         1- Pin number
- *                      2- Pin direction (High,Low)
+ *      Inputs:         1-
+ *                      2-
+ *                      3-
  *      Outputs:        None
  * Return:          None
  *******************************************************************************/
-void DIO_WritePin (uint32_t u32PortBase , uint8_t u8PinsNum , uint32_t u32PinIO)
+void DIO_WritePin (uint32_t u32PortBase , uint8_t u8Mask , uint8_t u32PinValue)
 {
-    u32PortBase = 0;
-    u8PinsNum = 0;
-    u32PinIO = 0;
+    switch(u32PinValue)
+    {
+        case HIGH:
+            HW_REG(u32PortBase,u8Mask) = 0xFF;
+            break;
+
+        case LOW:
+            HW_REG(u32PortBase,u8Mask) = 0x00;
+            break;
+
+        default:
+            break;
+    }
 }
 /*******************************************************************************/
 
@@ -603,13 +614,16 @@ void DIO_WritePin (uint32_t u32PortBase , uint8_t u8PinsNum , uint32_t u32PinIO)
  * Function Name:   DIO_ReadPin
  * Description:     used to read pin value
  * parameters:
- *      Inputs:         1- Pin number
- *      Outputs:        None
+ *      Inputs:         1- Port Base Address
+ *                      2- Pin Number
+ *      Outputs:        Pin Value
  * Return:          Pin value (High,Low)
  *******************************************************************************/
-uint8_t DIO_ReadPin (uint8_t PinNum)
+uint32_t DIO_ReadPin (uint32_t u32PortBase , uint8_t u8PinNum)
 {
-    PinNum = 0;
+    uint32_t PinValue = 0;
+    PinValue = /*(uint8_t)*/((HW_REG(u32PortBase,u8PinNum) & u8PinNum));
+    return PinValue;
 }
 /*******************************************************************************/
 

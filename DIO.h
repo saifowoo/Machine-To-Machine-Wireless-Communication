@@ -22,12 +22,12 @@
  *******************************************************************************/
 
 /********** Ports Base Address **********/
-#define GPIO_PORTA_BASE         GPIO_PORTA_DATA_BITS_R  /* GPIO Port A */
-#define GPIO_PORTB_BASE         GPIO_PORTB_DATA_BITS_R  /* GPIO Port B */
-#define GPIO_PORTC_BASE         GPIO_PORTC_DATA_BITS_R  /* GPIO Port C */
-#define GPIO_PORTD_BASE         GPIO_PORTD_DATA_BITS_R  /* GPIO Port D */
-#define GPIO_PORTE_BASE         GPIO_PORTE_DATA_BITS_R  /* GPIO Port E */
-#define GPIO_PORTF_BASE         GPIO_PORTF_DATA_BITS_R  /* GPIO Port F */
+#define GPIO_PORTA_BASE         0x40004000  /* GPIO Port A */
+#define GPIO_PORTB_BASE         0x40005000  /* GPIO Port B */
+#define GPIO_PORTC_BASE         0x40006000  /* GPIO Port C */
+#define GPIO_PORTD_BASE         0x40007000  /* GPIO Port D */
+#define GPIO_PORTE_BASE         0x40024000  /* GPIO Port E */
+#define GPIO_PORTF_BASE         0x40025000  /* GPIO Port F */
 
 /********** Pins mapping **********/
 #define GPIO_PIN_0              0x00000001  /* GPIO pin 0 */
@@ -143,23 +143,25 @@ void DIO_AlternateSelect (uint32_t u32PortBase , uint8_t u8PinsNum , uint8_t u32
  * Function Name:   DIO_WritePin
  * Description:     used to write on specific pin
  * parameters:
- *      Inputs:         1- Pin number
- *                      2- Pin direction (High,Low)
+ *      Inputs:         1-
+ *                      2-
+ *                      3-
  *      Outputs:        None
  * Return:          None
  *******************************************************************************/
-void DIO_WritePin (uint32_t u32PortBase , uint8_t u8PinsNum , uint32_t u32PinIO);
+void DIO_WritePin (uint32_t u32PortBase , uint8_t u8Mask , uint8_t u32PinValue);
 /*******************************************************************************/
 
 /*******************************************************************************
  * Function Name:   DIO_ReadPin
  * Description:     used to read pin value
  * parameters:
- *      Inputs:         1- Pin number
- *      Outputs:        None
+ *      Inputs:         1- Port Base Address
+ *                      2- Pin Number
+ *      Outputs:        Pin Value
  * Return:          Pin value (High,Low)
  *******************************************************************************/
-uint8_t DIO_ReadPin (uint8_t PinNum);
+uint32_t DIO_ReadPin (uint32_t u32PortBase , uint8_t u8PinNum);
 /*******************************************************************************/
 
 
