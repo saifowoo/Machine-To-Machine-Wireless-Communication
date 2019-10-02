@@ -1,7 +1,7 @@
 /*******************************************************************************
  * File Name    : DIO.c                                                        *
  * Description  : Source file for DIO pin description                          *
- * Created on   : 8/17/2019 11:42 AM                                           *
+ * Created on   : 10/2/2019 10:00 AM                                           *
  * Author       : Saif El-Deen Moustafa                                        *
  *******************************************************************************/
 
@@ -24,16 +24,16 @@
  * Function Name:   DIO_Init
  * Description:     used to initialize hardware GPIO pins
  * parameters:
- *      Inputs:         1-
- *                      2-
- *                      3-
- *                      4-
- *                      5-
- *                      6-
+ *      Inputs:         1- Port Base Address
+ *                      2- Pins Mask
+ *                      3- Pin Direction (Input or Output)
+ *                      4- Pin Alternate Function (Enable GPIO,Disable GPIO)
+ *                      5- Open Drain (Enable,Disable)
+ *                      6- Resistor (Pull up,Pull Down)
  *      Outputs:        None
  * Return:          None
  *******************************************************************************/
-void DIO_Init (uint32_t u32PortBase , uint8_t u8Mask , uint32_t u32PinIO , uint8_t u8PinAlternate , uint8_t u8OpenDrain , uint8_t u8PullResistor)
+void DIO_Init (uint32_t u32PortBase , uint8_t u8Mask , uint8_t u8PinDirection , uint8_t u8PinAlternate , uint8_t u8OpenDrain , uint8_t u8PullResistor)
 {
     switch(u32PortBase)
     {
@@ -48,18 +48,18 @@ void DIO_Init (uint32_t u32PortBase , uint8_t u8Mask , uint32_t u32PinIO , uint8
                     /*if GPIO*/
                     case GPIO_ALTERNATE_ENABLE:
                         /*Check I/O state*/
-                        switch(u32PinIO)
+                        switch(u8PinDirection)
                         {
                             /*if output*/
                             case OUTPUT:
                                 /*Set the direction to Output*/
-                                WRITE_REG(GPIO_PORTA_DIR_R,u8Mask,OUTPUT);
+                                WRITE_REG(GPIO_PORTA_DIR_R,u8Mask,ONE_MASK);
                                 break;
 
                             /*if input*/
                             case INPUT:
                                 /*Set the direction to Input*/
-                                WRITE_REG(GPIO_PORTA_DIR_R,u8Mask,INPUT);
+                                WRITE_REG(GPIO_PORTA_DIR_R,u8Mask,ZERO_MASK);
 
                             default:
                                 /*Do Nothing*/
@@ -67,7 +67,7 @@ void DIO_Init (uint32_t u32PortBase , uint8_t u8Mask , uint32_t u32PinIO , uint8
                         }
 
                         /*Set the pin to GPIO alternate enable*/
-                        WRITE_REG(GPIO_PORTA_AFSEL_R,u8Mask,GPIO_ALTERNATE_ENABLE);
+                        WRITE_REG(GPIO_PORTA_AFSEL_R,u8Mask,ZERO_MASK);
                         
                         /*Select pull down or pull up resistor*/
                         switch(u8PullResistor)
@@ -92,7 +92,7 @@ void DIO_Init (uint32_t u32PortBase , uint8_t u8Mask , uint32_t u32PinIO , uint8
                     /*if peripheral pin*/
                     case GPIO_ALTERNATE_DISABLE:
                         /*Set the pin to GPIO alternate disable*/
-                        WRITE_REG(GPIO_PORTA_AFSEL_R,u8Mask,GPIO_ALTERNATE_DISABLE);
+                        WRITE_REG(GPIO_PORTA_AFSEL_R,u8Mask,ONE_MASK);
                         break;
 
                     default:
@@ -105,13 +105,13 @@ void DIO_Init (uint32_t u32PortBase , uint8_t u8Mask , uint32_t u32PinIO , uint8
                     /*if open drain enable*/
                     case GPIO_OPEN_DRAIN_ENABLE:
                         /*Set the pin to open drain enable*/
-                        WRITE_REG(GPIO_PORTA_ODR_R,u8Mask,GPIO_OPEN_DRAIN_ENABLE);
+                        WRITE_REG(GPIO_PORTA_ODR_R,u8Mask,ONE_MASK);
                         break;
 
                     /*if open drain disable*/
                     case GPIO_OPEN_DRAIN_DISABLE:
                         /*Set the pin to open drain disable*/
-                        WRITE_REG(GPIO_PORTA_ODR_R,u8Mask,GPIO_OPEN_DRAIN_DISABLE);
+                        WRITE_REG(GPIO_PORTA_ODR_R,u8Mask,ZERO_MASK);
                         break;
 
                     default:
@@ -135,18 +135,18 @@ void DIO_Init (uint32_t u32PortBase , uint8_t u8Mask , uint32_t u32PinIO , uint8
                     /*if GPIO*/
                     case GPIO_ALTERNATE_ENABLE:
                         /*Check I/O state*/
-                        switch(u32PinIO)
+                        switch(u8PinDirection)
                         {
                             /*if output*/
                             case OUTPUT:
                                 /*Set the direction to Output*/
-                                WRITE_REG(GPIO_PORTB_DIR_R,u8Mask,OUTPUT);
+                                WRITE_REG(GPIO_PORTB_DIR_R,u8Mask,ONE_MASK);
                                 break;
 
                             /*if input*/
                             case INPUT:
                                 /*Set the direction to Input*/
-                                WRITE_REG(GPIO_PORTB_DIR_R,u8Mask,INPUT);
+                                WRITE_REG(GPIO_PORTB_DIR_R,u8Mask,ZERO_MASK);
 
                             default:
                                 /*Do Nothing*/
@@ -154,7 +154,7 @@ void DIO_Init (uint32_t u32PortBase , uint8_t u8Mask , uint32_t u32PinIO , uint8
                         }
 
                         /*Set the pin to GPIO alternate enable*/
-                        WRITE_REG(GPIO_PORTB_AFSEL_R,u8Mask,GPIO_ALTERNATE_ENABLE);
+                        WRITE_REG(GPIO_PORTB_AFSEL_R,u8Mask,ZERO_MASK);
                         
                         /*Select pull down or pull up resistor*/
                         switch(u8PullResistor)
@@ -179,7 +179,7 @@ void DIO_Init (uint32_t u32PortBase , uint8_t u8Mask , uint32_t u32PinIO , uint8
                     /*if peripheral pin*/
                     case GPIO_ALTERNATE_DISABLE:
                         /*Set the pin to GPIO alternate disable*/
-                        WRITE_REG(GPIO_PORTB_AFSEL_R,u8Mask,GPIO_ALTERNATE_DISABLE);
+                        WRITE_REG(GPIO_PORTB_AFSEL_R,u8Mask,ONE_MASK);
                         break;
 
                     default:
@@ -192,13 +192,13 @@ void DIO_Init (uint32_t u32PortBase , uint8_t u8Mask , uint32_t u32PinIO , uint8
                     /*if open drain enable*/
                     case GPIO_OPEN_DRAIN_ENABLE:
                         /*Set the pin to open drain enable*/
-                        WRITE_REG(GPIO_PORTB_ODR_R,u8Mask,GPIO_OPEN_DRAIN_ENABLE);
+                        WRITE_REG(GPIO_PORTB_ODR_R,u8Mask,ONE_MASK);
                         break;
 
                     /*if open drain disable*/
                     case GPIO_OPEN_DRAIN_DISABLE:
                         /*Set the pin to open drain disable*/
-                        WRITE_REG(GPIO_PORTB_ODR_R,u8Mask,GPIO_OPEN_DRAIN_DISABLE);
+                        WRITE_REG(GPIO_PORTB_ODR_R,u8Mask,ZERO_MASK);
                         break;
 
                     default:
@@ -222,18 +222,18 @@ void DIO_Init (uint32_t u32PortBase , uint8_t u8Mask , uint32_t u32PinIO , uint8
                     /*if GPIO*/
                     case GPIO_ALTERNATE_ENABLE:
                         /*Check I/O state*/
-                        switch(u32PinIO)
+                        switch(u8PinDirection)
                         {
                             /*if output*/
                             case OUTPUT:
                                 /*Set the direction to Output*/
-                                WRITE_REG(GPIO_PORTC_DIR_R,u8Mask,OUTPUT);
+                                WRITE_REG(GPIO_PORTC_DIR_R,u8Mask,ONE_MASK);
                                 break;
 
                             /*if input*/
                             case INPUT:
                                 /*Set the direction to Input*/
-                                WRITE_REG(GPIO_PORTC_DIR_R,u8Mask,INPUT);
+                                WRITE_REG(GPIO_PORTC_DIR_R,u8Mask,ZERO_MASK);
 
                             default:
                                 /*Do Nothing*/
@@ -241,7 +241,7 @@ void DIO_Init (uint32_t u32PortBase , uint8_t u8Mask , uint32_t u32PinIO , uint8
                         }
 
                         /*Set the pin to GPIO alternate enable*/
-                        WRITE_REG(GPIO_PORTC_AFSEL_R,u8Mask,GPIO_ALTERNATE_ENABLE);
+                        WRITE_REG(GPIO_PORTC_AFSEL_R,u8Mask,ZERO_MASK);
                         
                         /*Select pull down or pull up resistor*/
                         switch(u8PullResistor)
@@ -266,7 +266,7 @@ void DIO_Init (uint32_t u32PortBase , uint8_t u8Mask , uint32_t u32PinIO , uint8
                     /*if peripheral pin*/
                     case GPIO_ALTERNATE_DISABLE:
                         /*Set the pin to GPIO alternate disable*/
-                        WRITE_REG(GPIO_PORTC_AFSEL_R,u8Mask,GPIO_ALTERNATE_DISABLE);
+                        WRITE_REG(GPIO_PORTC_AFSEL_R,u8Mask,ONE_MASK);
                         break;
 
                     default:
@@ -279,13 +279,13 @@ void DIO_Init (uint32_t u32PortBase , uint8_t u8Mask , uint32_t u32PinIO , uint8
                     /*if open drain enable*/
                     case GPIO_OPEN_DRAIN_ENABLE:
                         /*Set the pin to open drain enable*/
-                        WRITE_REG(GPIO_PORTC_ODR_R,u8Mask,GPIO_OPEN_DRAIN_ENABLE);
+                        WRITE_REG(GPIO_PORTC_ODR_R,u8Mask,ONE_MASK);
                         break;
 
                     /*if open drain disable*/
                     case GPIO_OPEN_DRAIN_DISABLE:
                         /*Set the pin to open drain disable*/
-                        WRITE_REG(GPIO_PORTC_ODR_R,u8Mask,GPIO_OPEN_DRAIN_DISABLE);
+                        WRITE_REG(GPIO_PORTC_ODR_R,u8Mask,ZERO_MASK);
                         break;
 
                     default:
@@ -309,18 +309,18 @@ void DIO_Init (uint32_t u32PortBase , uint8_t u8Mask , uint32_t u32PinIO , uint8
                     /*if GPIO*/
                     case GPIO_ALTERNATE_ENABLE:
                         /*Check I/O state*/
-                        switch(u32PinIO)
+                        switch(u8PinDirection)
                         {
                             /*if output*/
                             case OUTPUT:
                                 /*Set the direction to Output*/
-                                WRITE_REG(GPIO_PORTD_DIR_R,u8Mask,OUTPUT);
+                                WRITE_REG(GPIO_PORTD_DIR_R,u8Mask,ONE_MASK);
                                 break;
 
                             /*if input*/
                             case INPUT:
                                 /*Set the direction to Input*/
-                                WRITE_REG(GPIO_PORTD_DIR_R,u8Mask,INPUT);
+                                WRITE_REG(GPIO_PORTD_DIR_R,u8Mask,ZERO_MASK);
 
                             default:
                                 /*Do Nothing*/
@@ -328,7 +328,7 @@ void DIO_Init (uint32_t u32PortBase , uint8_t u8Mask , uint32_t u32PinIO , uint8
                         }
 
                         /*Set the pin to GPIO alternate enable*/
-                        WRITE_REG(GPIO_PORTD_AFSEL_R,u8Mask,GPIO_ALTERNATE_ENABLE);
+                        WRITE_REG(GPIO_PORTD_AFSEL_R,u8Mask,ZERO_MASK);
                         
                         /*Select pull down or pull up resistor*/
                         switch(u8PullResistor)
@@ -353,7 +353,7 @@ void DIO_Init (uint32_t u32PortBase , uint8_t u8Mask , uint32_t u32PinIO , uint8
                     /*if peripheral pin*/
                     case GPIO_ALTERNATE_DISABLE:
                         /*Set the pin to GPIO alternate disable*/
-                        WRITE_REG(GPIO_PORTD_AFSEL_R,u8Mask,GPIO_ALTERNATE_DISABLE);
+                        WRITE_REG(GPIO_PORTD_AFSEL_R,u8Mask,ONE_MASK);
                         break;
 
                     default:
@@ -366,13 +366,13 @@ void DIO_Init (uint32_t u32PortBase , uint8_t u8Mask , uint32_t u32PinIO , uint8
                     /*if open drain enable*/
                     case GPIO_OPEN_DRAIN_ENABLE:
                         /*Set the pin to open drain enable*/
-                        WRITE_REG(GPIO_PORTD_ODR_R,u8Mask,GPIO_OPEN_DRAIN_ENABLE);
+                        WRITE_REG(GPIO_PORTD_ODR_R,u8Mask,ONE_MASK);
                         break;
 
                     /*if open drain disable*/
                     case GPIO_OPEN_DRAIN_DISABLE:
                         /*Set the pin to open drain disable*/
-                        WRITE_REG(GPIO_PORTD_ODR_R,u8Mask,GPIO_OPEN_DRAIN_DISABLE);
+                        WRITE_REG(GPIO_PORTD_ODR_R,u8Mask,ZERO_MASK);
                         break;
 
                     default:
@@ -396,18 +396,18 @@ void DIO_Init (uint32_t u32PortBase , uint8_t u8Mask , uint32_t u32PinIO , uint8
                     /*if GPIO*/
                     case GPIO_ALTERNATE_ENABLE:
                         /*Check I/O state*/
-                        switch(u32PinIO)
+                        switch(u8PinDirection)
                         {
                             /*if output*/
                             case OUTPUT:
                                 /*Set the direction to Output*/
-                                WRITE_REG(GPIO_PORTE_DIR_R,u8Mask,OUTPUT);
+                                WRITE_REG(GPIO_PORTE_DIR_R,u8Mask,ONE_MASK);
                                 break;
 
                             /*if input*/
                             case INPUT:
                                 /*Set the direction to Input*/
-                                WRITE_REG(GPIO_PORTE_DIR_R,u8Mask,INPUT);
+                                WRITE_REG(GPIO_PORTE_DIR_R,u8Mask,ZERO_MASK);
 
                             default:
                                 /*Do Nothing*/
@@ -415,7 +415,7 @@ void DIO_Init (uint32_t u32PortBase , uint8_t u8Mask , uint32_t u32PinIO , uint8
                         }
 
                         /*Set the pin to GPIO alternate enable*/
-                        WRITE_REG(GPIO_PORTE_AFSEL_R,u8Mask,GPIO_ALTERNATE_ENABLE);
+                        WRITE_REG(GPIO_PORTE_AFSEL_R,u8Mask,ZERO_MASK);
                         
                         /*Select pull down or pull up resistor*/
                         switch(u8PullResistor)
@@ -440,7 +440,7 @@ void DIO_Init (uint32_t u32PortBase , uint8_t u8Mask , uint32_t u32PinIO , uint8
                     /*if peripheral pin*/
                     case GPIO_ALTERNATE_DISABLE:
                         /*Set the pin to GPIO alternate disable*/
-                        WRITE_REG(GPIO_PORTE_AFSEL_R,u8Mask,GPIO_ALTERNATE_DISABLE);
+                        WRITE_REG(GPIO_PORTE_AFSEL_R,u8Mask,ONE_MASK);
                         break;
 
                     default:
@@ -453,13 +453,13 @@ void DIO_Init (uint32_t u32PortBase , uint8_t u8Mask , uint32_t u32PinIO , uint8
                     /*if open drain enable*/
                     case GPIO_OPEN_DRAIN_ENABLE:
                         /*Set the pin to open drain enable*/
-                        WRITE_REG(GPIO_PORTE_ODR_R,u8Mask,GPIO_OPEN_DRAIN_ENABLE);
+                        WRITE_REG(GPIO_PORTE_ODR_R,u8Mask,ONE_MASK);
                         break;
 
                     /*if open drain disable*/
                     case GPIO_OPEN_DRAIN_DISABLE:
                         /*Set the pin to open drain disable*/
-                        WRITE_REG(GPIO_PORTE_ODR_R,u8Mask,GPIO_OPEN_DRAIN_DISABLE);
+                        WRITE_REG(GPIO_PORTE_ODR_R,u8Mask,ZERO_MASK);
                         break;
 
                     default:
@@ -483,18 +483,18 @@ void DIO_Init (uint32_t u32PortBase , uint8_t u8Mask , uint32_t u32PinIO , uint8
                     /*if GPIO*/
                     case GPIO_ALTERNATE_ENABLE:
                         /*Check I/O state*/
-                        switch(u32PinIO)
+                        switch(u8PinDirection)
                         {
                             /*if output*/
                             case OUTPUT:
                                 /*Set the direction to Output*/
-                                WRITE_REG(GPIO_PORTF_DIR_R,u8Mask,OUTPUT);
+                                WRITE_REG(GPIO_PORTF_DIR_R,u8Mask,ONE_MASK);
                                 break;
 
                             /*if input*/
                             case INPUT:
                                 /*Set the direction to Input*/
-                                WRITE_REG(GPIO_PORTF_DIR_R,u8Mask,INPUT);
+                                WRITE_REG(GPIO_PORTF_DIR_R,u8Mask,ZERO_MASK);
 
                             default:
                                 /*Do Nothing*/
@@ -502,7 +502,7 @@ void DIO_Init (uint32_t u32PortBase , uint8_t u8Mask , uint32_t u32PinIO , uint8
                         }
 
                         /*Set the pin to GPIO alternate enable*/
-                        WRITE_REG(GPIO_PORTF_AFSEL_R,u8Mask,GPIO_ALTERNATE_ENABLE);
+                        WRITE_REG(GPIO_PORTF_AFSEL_R,u8Mask,ZERO_MASK);
                         
                         /*Select pull down or pull up resistor*/
                         switch(u8PullResistor)
@@ -527,7 +527,7 @@ void DIO_Init (uint32_t u32PortBase , uint8_t u8Mask , uint32_t u32PinIO , uint8
                     /*if peripheral pin*/
                     case GPIO_ALTERNATE_DISABLE:
                         /*Set the pin to GPIO alternate disable*/
-                        WRITE_REG(GPIO_PORTF_AFSEL_R,u8Mask,GPIO_ALTERNATE_DISABLE);
+                        WRITE_REG(GPIO_PORTF_AFSEL_R,u8Mask,ONE_MASK);
                         break;
 
                     default:
@@ -540,13 +540,13 @@ void DIO_Init (uint32_t u32PortBase , uint8_t u8Mask , uint32_t u32PinIO , uint8
                     /*if open drain enable*/
                     case GPIO_OPEN_DRAIN_ENABLE:
                         /*Set the pin to open drain enable*/
-                        WRITE_REG(GPIO_PORTF_ODR_R,u8Mask,GPIO_OPEN_DRAIN_ENABLE);
+                        WRITE_REG(GPIO_PORTF_ODR_R,u8Mask,ONE_MASK);
                         break;
 
                     /*if open drain disable*/
                     case GPIO_OPEN_DRAIN_DISABLE:
                         /*Set the pin to open drain disable*/
-                        WRITE_REG(GPIO_PORTF_ODR_R,u8Mask,GPIO_OPEN_DRAIN_DISABLE);
+                        WRITE_REG(GPIO_PORTF_ODR_R,u8Mask,ZERO_MASK);
                         break;
 
                     default:
@@ -569,16 +569,43 @@ void DIO_Init (uint32_t u32PortBase , uint8_t u8Mask , uint32_t u32PinIO , uint8
  * Function Name:   DIO_AlternateSelect
  * Description:     used to write on alternate select
  * parameters:
- *      Inputs:         1-
- *                      2-
- *                      3-
+ *      Inputs:         1- Port Base Address
+ *                      2- Pin Number
+ *                      3- Pin Value
  *      Outputs:        None
  * Return:          None
  *******************************************************************************/
 void DIO_AlternateSelect (uint32_t u32PortBase , uint8_t u8PinsNum , uint8_t u32PinValue)
 {
-    DIO_Init(u32PortBase, u8PinsNum, NC, GPIO_ALTERNATE_DISABLE, NC, NC);
-    WRITE_REG(u32PortBase , (0x0F << (u8PinsNum * 4)) , (u32PinValue << (u8PinsNum * 4)));
+    switch(u32PortBase)
+    {
+        case GPIO_PORTA_BASE:
+            WRITE_REG(GPIO_PORTA_PCTL_R , (0x0F << (u8PinsNum * 4)) , (u32PinValue << (u8PinsNum * 4)));
+            break;
+
+        case GPIO_PORTB_BASE:
+            WRITE_REG(GPIO_PORTB_PCTL_R , (0x0F << (u8PinsNum * 4)) , (u32PinValue << (u8PinsNum * 4)));
+            break;
+
+        case GPIO_PORTC_BASE:
+            WRITE_REG(GPIO_PORTC_PCTL_R , (0x0F << (u8PinsNum * 4)) , (u32PinValue << (u8PinsNum * 4)));
+            break;
+
+        case GPIO_PORTD_BASE:
+            WRITE_REG(GPIO_PORTD_PCTL_R , (0x0F << (u8PinsNum * 4)) , (u32PinValue << (u8PinsNum * 4)));
+            break;
+
+        case GPIO_PORTE_BASE:
+            WRITE_REG(GPIO_PORTE_PCTL_R , (0x0F << (u8PinsNum * 4)) , (u32PinValue << (u8PinsNum * 4)));
+            break;
+
+        case GPIO_PORTF_BASE:
+            WRITE_REG(GPIO_PORTF_PCTL_R , (0x0F << (u8PinsNum * 4)) , (u32PinValue << (u8PinsNum * 4)));
+            break;
+
+        default:
+            break;
+    }
 }
 /*******************************************************************************/
 
@@ -586,9 +613,9 @@ void DIO_AlternateSelect (uint32_t u32PortBase , uint8_t u8PinsNum , uint8_t u32
  * Function Name:   DIO_WritePin
  * Description:     used to write on specific pin
  * parameters:
- *      Inputs:         1-
- *                      2-
- *                      3-
+ *      Inputs:         1- Port Base Address
+ *                      2- Pins Mask
+ *                      3- Pin Value
  *      Outputs:        None
  * Return:          None
  *******************************************************************************/
@@ -611,6 +638,21 @@ void DIO_WritePin (uint32_t u32PortBase , uint8_t u8Mask , uint8_t u32PinValue)
 /*******************************************************************************/
 
 /*******************************************************************************
+ * Function Name:   DIO_TogglePin
+ * Description:     used to toggle on specific pin
+ * parameters:
+ *      Inputs:         1- Port Base Address
+ *                      2- Pins Mask
+ *      Outputs:        None
+ * Return:          None
+ *******************************************************************************/
+void DIO_TogglePin (uint32_t u32PortBase , uint8_t u8Mask)
+{
+    HW_REG(u32PortBase,u8Mask) ^= u8Mask;
+}
+/*******************************************************************************/
+
+/*******************************************************************************
  * Function Name:   DIO_ReadPin
  * Description:     used to read pin value
  * parameters:
@@ -619,10 +661,47 @@ void DIO_WritePin (uint32_t u32PortBase , uint8_t u8Mask , uint8_t u32PinValue)
  *      Outputs:        Pin Value
  * Return:          Pin value (High,Low)
  *******************************************************************************/
-uint32_t DIO_ReadPin (uint32_t u32PortBase , uint8_t u8PinNum)
+uint8_t DIO_ReadPin (uint32_t u32PortBase , uint8_t u8PinNum)
 {
-    uint32_t PinValue = 0;
-    PinValue = /*(uint8_t)*/((HW_REG(u32PortBase,u8PinNum) & u8PinNum));
+    uint8_t PinValue = 0;
+    switch(u8PinNum)
+    {
+        case GPIO_PIN_0:
+            PinValue = (uint8_t)((HW_REG(u32PortBase,u8PinNum) & u8PinNum) >> PIN0);
+            break;
+
+        case GPIO_PIN_1:
+            PinValue = (uint8_t)((HW_REG(u32PortBase,u8PinNum) & u8PinNum) >> PIN1);
+            break;
+
+        case GPIO_PIN_2:
+            PinValue = (uint8_t)((HW_REG(u32PortBase,u8PinNum) & u8PinNum) >> PIN2);
+            break;
+
+        case GPIO_PIN_3:
+            PinValue = (uint8_t)((HW_REG(u32PortBase,u8PinNum) & u8PinNum) >> PIN3);
+            break;
+
+        case GPIO_PIN_4:
+            PinValue = (uint8_t)((HW_REG(u32PortBase,u8PinNum) & u8PinNum) >> PIN4);
+            break;
+
+        case GPIO_PIN_5:
+            PinValue = (uint8_t)((HW_REG(u32PortBase,u8PinNum) & u8PinNum) >> PIN5);
+            break;
+
+        case GPIO_PIN_6:
+            PinValue = (uint8_t)((HW_REG(u32PortBase,u8PinNum) & u8PinNum) >> PIN6);
+            break;
+
+        case GPIO_PIN_7:
+            PinValue = (uint8_t)((HW_REG(u32PortBase,u8PinNum) & u8PinNum) >> PIN7);
+            break;
+
+        default:
+            PinValue = (uint8_t)((HW_REG(u32PortBase,u8PinNum) & u8PinNum));
+            break;
+    }
     return PinValue;
 }
 /*******************************************************************************/
