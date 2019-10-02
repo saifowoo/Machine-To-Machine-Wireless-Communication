@@ -90,12 +90,23 @@
 #define HIGH        1
 
 /********** Hardware Keypad Pins **********/
-#define ROW1
-#define ROW2
-#define ROW3
-#define LINE1
-#define LINE2
-#define LINE3
+#define ROW1                    GPIO_PIN_2
+#define ROW1_PORT_BASE          GPIO_PORTB_BASE
+
+#define ROW2                    GPIO_PIN_3
+#define ROW2_PORT_BASE          GPIO_PORTB_BASE
+
+#define ROW3                    GPIO_PIN_6
+#define ROW3_PORT_BASE          GPIO_PORTB_BASE
+
+#define COLUMN1                 GPIO_PIN_7
+#define COLUMN1_PORT_BASE       GPIO_PORTD_BASE
+
+#define COLUMN2                 GPIO_PIN_6
+#define COLUMN2_PORT_BASE       GPIO_PORTD_BASE
+
+#define COLUMN3                 GPIO_PIN_2
+#define COLUMN3_PORT_BASE       GPIO_PORTE_BASE
 
 /********** Hardware 7 Segment Pins **********/
 #define SEGA
